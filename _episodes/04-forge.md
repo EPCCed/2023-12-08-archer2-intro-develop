@@ -145,11 +145,94 @@ There are many powerful and quite easy to use tools here. Along the top are butt
 > ## Exercise
 > Try to run the buggy version of `gdbhpc_exercise` in DDT yourself using 2 processes. Can you see how you would have debugged it here?
 > > ## Solution
-> > If you run without setting breakpointsm or if you continuously step over, you'll see that the code eventually hangs at lines 19 and 21. The stack trace at the bottom left will show you that one process (process 0) is at line 19, and another one (process 1) is at line 21. Just as before, the code has deadlocked. The tags and receiving process number in the MPI calls must be fixed.
+> > If you run without setting breakpoints, or if you continuously step over, you'll see that the code eventually hangs at lines 19 and 21. The stack trace at the bottom left will show you that one process (process 0) is at line 19, and another one (process 1) is at line 21. Just as before, the code has deadlocked. The tags and receiving process number in the MPI calls must be fixed.
 > > If you carry on further, you'll find that process 1 reaches `MPI_Finalize()` but process 0 is stuck in the `while` loop in the `sum_even()` function. The stack trace should again help you. If you repeatedly run and pause, you'll notice the value of `i` doesn't change in the top-right local variable viewer. No wonder the loop can never exit!
 > {: .solution}
 {: .challenge}
 
-This is as much of DDT as we will cover for now, but to learn more you can read the [ARCHER2 documentation](https://docs.archer2.ac.uk/data-tools/arm-forge/#using-ddt) (which also covers post-mortem 'offline' debugging) and the [Linaro Forge documentation](https://www.linaroforge.com/documentation/).
-
 ## Profiling with MAP
+
+Let's now look at how to profile with MAP. As before, we'll reuse the profiling experiment from earlier as we already have some experience. Make sure you have the `arm/forge` module loaded, re-download the `.tar.gz` containing the source code and extract it.
+
+```
+auser@ln01:~> module load arm/forge
+auser@ln01:~> wget {{site.url}}{{site.baseurl}}/files/nbody-par.tar.gz
+auser@ln01:~> tar -xzf nbody-par.tar.gz
+```
+{: .bash}
+
+For MAP to be able to profile the executable, we will need to link some extra libraries to it. The location of the libraries to link also depends on which compiler you are using. The link options for each compiler are:
+
+* For the Cray compilers:
+  ```
+  -L${FORGE_DIR}/map/libs/default/cray/ofi -lmap-sampler-pmpi -lmap-sampler -Wl,--eh-frame-hdr -Wl,-rpath=${FORGE_DIR}/map/libs/default/cray/ofi
+  ```
+  {: .bash}
+* For the GCC compilers:
+  ```
+  -L${FORGE_DIR}/map/libs/default/gnu/ofi -lmap-sampler-pmpi -lmap-sampler -Wl,--eh-frame-hdr -Wl,-rpath=${FORGE_DIR}/map/libs/default/gnu/ofi
+  ```
+  {: .bash}
+* For the AOCC compilers:
+  ```
+  -L${FORGE_DIR}/map/libs/default/aocc/ofi -lmap-sampler-pmpi -lmap-sampler -Wl,--eh-frame-hdr -Wl,-rpath=${FORGE_DIR}/map/libs/default/aocc/ofi
+  ```
+  {: .bash}
+
+For MAP to extract line numbers from profiling information, we should also tell the compilers to add minimal debugging information -- but not so much that it impacts performance. Linaro recommend the following for the Cray and GCC compilers:
+
+* For the Cray C and C++ compilers:
+  ```
+  -g1 -O3 -fno-inline-functions -fno-optimize-sibling-calls
+  ```
+  {: .bash}
+* For the Cray Fortran compiler:
+  ```
+  -G2 -O3 -h ipa0
+  ```
+  {: .bash}
+* For the GCC compilers:
+  ```
+  -g1 -O3 -fno-inline -fno-optimize-sibling-calls
+  ```
+  {: .bash}
+
+With CrayPat the compiler wrappers took care of adding all these options for us, but here we will need to do so manually. To do so, you can `export` them to the `CFLAGS` or `FFLAGS` environment variables, or if you prefer you can edit the `Makefile` and add them to those options there.
+
+Assuming we are using the GCC compilers, let's set the `CFLAGS` environment variable and then build the N-body programme with `make`.
+
+Then, compile the code with `make`:
+
+```
+auser@ln01:~> export CFLAGS="-g1 -O3 -fno-inline -fno-optimize-sibling-calls -L${FORGE_DIR}/map/libs/default/cray/ofi -lmap-sampler-pmpi -lmap-sampler -Wl,--eh-frame-hdr -Wl,-rpath=${FORGE_DIR}/map/libs/default/cray/ofi"
+auser@ln01:~> make
+```
+{: .bash}
+
+You may receive warnings about unused arguments. You don't need to worry about these -- what matters is that MAP needs the libraries at runtime.
+
+You can, if you like, launch profiling jobs much the way you did earlier for debugging jobs. At the same time, as profiling is often done 'after the fact', it is generally easier to run the jobs from a normal job script and then load the output into MAP for visualisation. You can convert any job script to run a MAP profiling job by making sure that the `arm/forge` module is loaded during the script and changing the `srun` command to a `map` command of the following form:
+
+```
+map -n <number of MPI processes> --mpi=slurm --mpiargs="--hint=nomultithread --distribution=block:block" --profile ./my_executable
+```
+{: .bash}
+
+You can then submit the job as normal with `sbatch`. Once completed, you should find a `.map` file in the job's working directory with a name containing the executable name, the number of MPI tasks, OpenMP threads, and nodes, and the run time, for example `nbody-parallel_64p_1n_1t_2023-11-30_11-57.map`.
+
+Any `.map` file can be opened with the Forge GUI. Once your client is connected to ARCHER2, click on 'MAP' and then 'Load Profile Data File'. If the run was so short that not many samples were collected, you may be warned. Once open, you will be faced with a screen showing the timeline of execution, broken down into different sources of time spent, floating point activity and memory usage. You should also see the code and a window breaking down how time was spent on that line of code (if enough time was spent there for this to be detected). At the bottom are the call stacks and functions with total time spent on each as well as mini previews of their own profiles.
+
+{% include figure.html url="" max-width="80%" file="/fig/map-profile-screen.png" alt="MAP on opening a profile of nbody-parallel.exe" caption="" %}
+
+As with DDT, there is a lot of functionality here. You can click and drag across the main timelines at the top of the screen to zoom in; right-click to zoom back out. You can view different sets of timelines through the 'Metrics' menu at the top. These give more information on MPI call duration, bandwidth and call frequency, CPU instruction throughput and branching, and I/O read and write rates.
+
+> ## Exercise
+> Recompile `nbody-parallel.exe` for use with MAP and then profile a run across 64 MPI processes. Try to determine which parts of the code are consuming the most time. Can see you see any points where MPI communications appear to be slowing the simulation down? A hint: you can increase the number of iterations via the `-i` parameter to get a longer runtime.
+> > ## Solution
+> > There are a few things to take note of. First is that the first portion of the run will be spent doing I/O. Once running, the code does a good job of always doing something, rather than waiting on I/O or communication. If you look in the 'Main Thread Stacks' or 'Functions' tab at the bottom, you should see that most time is spent in the `compute_forces_multi_set` function. You should be able to also see the specific lines within this function. Looking at the MPI activity, you may see step-shaped features, almost like a sawtooth wave. You can identify these as belonging to `MPI_Sendrecv` calls which are blocking and so holding up the code.
+> {: .solution}
+{: .challenge}
+
+## More with Forge
+
+This is as much of Forge as we will cover for now, but to learn more you can read the [ARCHER2 documentation](https://docs.archer2.ac.uk/data-tools/arm-forge/) and the [Linaro Forge documentation](https://www.linaroforge.com/documentation/). In particular, you may find the [ARCHER2 documentation on 'offline' debugging](https://docs.archer2.ac.uk/data-tools/arm-forge/#post-mortem-debugging) useful. This allows you to run post-mortem debugging for jobs which have crashed, which may be particularly useful if your job is large and needs to wait a long time in the queue.
