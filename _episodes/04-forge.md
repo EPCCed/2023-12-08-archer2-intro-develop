@@ -77,7 +77,7 @@ A new window will appear listing your current connections. Unless you've used Fo
 
 Click on OK, then close the connection configuration window. You should now be ready to connect to ARCHER2.
 
-To give it a go, click on the 'Remote Launch' drop-down box again, then click on your new connection. If all goes well, the connection will start, the initial key exchange will succeed, and you will be prompted for your normal ARCHER2 login password in a window that briefly opens. Once you are connected, you should see that licence information is now visible at the bottom left of the Forge window, and your connection is listed at the bottom right.
+To give it a go, click on the 'Remote Launch' drop-down box again, then click on your new connection. If all goes well, the connection will start, the initial key exchange will succeed, and you will be prompted for your ARCHER2 TOTP in a window that briefly opens. Once you are connected, you should see that licence information is now visible at the bottom left of the Forge window, and your connection is listed at the bottom right.
 
 ## Debugging with DDT
 
