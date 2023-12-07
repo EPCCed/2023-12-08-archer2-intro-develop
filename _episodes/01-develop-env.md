@@ -44,13 +44,13 @@ auser@ln01:~> module list
 {: .language-bash}
 ```
 Currently Loaded Modules:
-  1) cce/11.0.4                                  8) cray-mpich/8.1.4
-  2) craype/2.7.6                                9) cray-libsci/21.04.1.1
-  3) craype-x86-rome                            10) PrgEnv-cray/8.0.0
-  4) libfabric/1.11.0.4.71                      11) bolt/0.7
-  5) craype-network-ofi                         12) epcc-setup-env
-  6) perftools-base/21.02.0                     13) load-epcc-module
-  7) xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta 
+  1) craype-x86-rome                         8) cray-dsmml/0.2.2
+  2) libfabric/1.12.1.2.2.0.0                9) cray-mpich/8.1.23
+  3) craype-network-ofi                     10) cray-libsci/22.12.1.1
+  4) perftools-base/22.12.0                 11) PrgEnv-cray/8.3.3
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  12) bolt/0.8
+  6) cce/15.0.0                             13) epcc-setup-env
+  7) craype/2.7.19                          14) load-epcc-module
 ```
 {: .output}
 
@@ -80,118 +80,140 @@ auser@ln01:~> module avail
 ```
 {: .language-bash}
 ```
+--------- /work/y07/shared/archer2-lmod/utils/compiler/crayclang/10.0 ----------
+   darshan/3.3.1
+
 ------------------ /work/y07/shared/archer2-lmod/python/core -------------------
-   matplotlib/3.4.3    netcdf4/1.5.7    seaborn/0.11.2
+   matplotlib/3.7.2        pytorch/2.0.0  (D)    tensorflow/2.9.3
+   netcdf4/1.5.7           pytorch/2.0.1         tensorflow/2.12.0 (D)
+   netcdf4/1.6.4    (D)    scons/4.3.0           tensorflow/2.13.0
+   pytorch/1.10.2          seaborn/0.12.2
 
 ------------------- /work/y07/shared/archer2-lmod/libs/core --------------------
-   adios/1.13.1                                 metis/5.1.0
-   arpack-ng/3.8.0                              mkl/19.5-281
-   boost/1.72.0                                 mkl/21.2-2883      (D)
-   eigen/3.4.0                                  mumps/5.3.5
-   epcc-cray-hdf5-parallel/1.12.0.3      (D)    parmetis/4.0.3
-   epcc-cray-hdf5-parallel/1.12.0.7             petsc/3.14.2
-   epcc-cray-netcdf-hdf5parallel/4.7.4.3 (D)    scotch/6.1.0
-   epcc-cray-netcdf-hdf5parallel/4.7.4.7        slepc/3.14.1
-   glm/0.9.9.6                                  superlu-dist/6.4.0
-   hypre/2.18.0                                 superlu/5.2.2
-   matio/1.5.18                                 trilinos/12.18.1
+   aocl/3.1     (D)    libxml2/2.9.7         petsc/3.18.5       (D)
+   aocl/4.0            matio/1.5.23          scotch/6.1.0
+   boost/1.72.0        mesa/21.0.1           scotch/7.0.3       (D)
+   boost/1.81.0 (D)    metis/5.1.0           slepc/3.14.1
+   eigen/3.4.0         mkl/2023.0.0          slepc/3.18.3       (D)
+   gmp/6.2.1           mumps/5.3.5           superlu-dist/6.4.0
+   gsl/2.7             mumps/5.5.1    (D)    superlu-dist/8.1.2 (D)
+   hypre/2.18.0        parmetis/4.0.3        superlu/5.2.2
+   hypre/2.25.0 (D)    petsc/3.14.2          trilinos/12.18.1
 
 ------------------- /work/y07/shared/archer2-lmod/apps/core --------------------
-   castep/20.11                    nektar/5.0.3
-   code_saturne/7.0.1-cce12        nwchem/7.0.2
-   code_saturne/7.0.1-gcc11 (D)    onetep/6.1.3.7
-   cp2k/cp2k-8.1                   openfoam/com/v2106
-   elk/elk-7.2.42                  openfoam/org/v8.20200901
-   gromacs/2021.3+plumed           openfoam/org/v9.20210903 (D)
-   gromacs/2021.3           (D)    quantum-espresso/6.8
-   lammps/29_Sep_2021              vasp/5/5.4.4.pl2-vtst
-   namd/2.14-nosmp                 vasp/5/5.4.4.pl2         (D)
-   namd/2.14                (D)    vasp/6/6.2.1
+   castep/22.11                    onetep/6.1.9.0-CCE-LibSci  (D)
+   castep/23.11             (D)    onetep/6.1.9.0-GCC-LibSci
+   code_saturne/7.0.1-cce15        onetep/6.1.9.0-GCC-MKL
+   code_saturne/7.0.1-gcc11 (D)    onetep/6.1.43.0-CCE-LibSci
+   cp2k/cp2k-8.2.0                 onetep/6.1.43.0-GCC-LibSci
+   cp2k/cp2k-9.1.0                 onetep/6.1.43.0-GCC-MKL
+   cp2k/cp2k-2022.2                openfoam/com/v2106
+   cp2k/cp2k-2023.1.xsmm           openfoam/com/v2212         (D)
+   cp2k/cp2k-2023.1                openfoam/org/v9.20210903
+   cp2k/cp2k-2023.2         (D)    openfoam/org/v10.20230119  (D)
+   elk/elk-7.2.42                  py-chemshell/a4cfb310
+   fhiaims/210716.3         (D)    py-chemshell/cee39100      (D)
+   fhiaims/221103.0                quantum_espresso/6.8       (D)
+   gromacs/2022.4+plumed           quantum_espresso/7.1
+   gromacs/2022.4           (D)    tcl-chemshell/3.7.1
+   lammps/17Feb2023                vasp/5/5.4.4.pl2-vtst
+   namd/2.14-nosmp                 vasp/5/5.4.4.pl2
+   namd/2.14                (D)    vasp/6/6.3.2
+   nektar/5.2.0                    vasp/6/6.4.1-vtst
+   nwchem/7.0.2             (D)    vasp/6/6.4.1               (D)
+   nwchem/7.2.2                    vasp/6/6.4.2
 
 ------------------- /work/y07/shared/archer2-lmod/utils/core -------------------
-   bolt/0.7         (L)    genmaskcpu/1.0        visidata/2.1
-   cdo/1.9.9rc1            ncl/6.6.2             vmd/1.9.3-gcc10
-   cmake/3.21.3            other-software/1.1    xthi/1.2
-   epcc-reframe/0.2        reframe/3.8.2
-   epcc-setup-env   (L)    usage-analysis/1.1
+   amd-uprof/4.0.341            imagemagick/6.8.9
+   arm/forge/22.1.3             imagemagick/7.1.0    (D)
+   bolt/0.7                     ncl/6.6.2
+   bolt/0.8            (L,D)    nco/5.1.6
+   cdo/1.9.9rc1                 ncview/2.1.7
+   cdo/2.1.1           (D)      osu-benchmarks/5.4.1
+   cmake/3.18.4                 other-software/1.0
+   cmake/3.21.3        (D)      paraview/5.10.1      (D)
+   darshan-util/3.3.1           paraview/5.11.1
+   epcc-reframe/0.2             reframe/4.2.1
+   epcc-setup-env      (L)      spindle/0.13
+   extra-compilers/1.0          tcl/8.6.13
+   gct/v6.2.20201212            tk/8.6.13
+   gct/v6.2.20220524   (D)      usage-analysis/1.4
+   genmaskcpu/1.0               visidata/2.1
+   gnuplot/5.4.2-simg           vmd/1.9.3-cpe15
+   gnuplot/5.4.2       (D)      vmd/1.9.3-gcc10      (D)
+   gnuplot/5.4.3                xthi/1.3
 
---- /opt/cray/pe/lmod/modulefiles/mpi/crayclang/10.0/ofi/1.0/cray-mpich/8.0 ----
-   cray-hdf5-parallel/1.12.0.3 (D)    cray-parallel-netcdf/1.12.1.3 (D)
-   cray-hdf5-parallel/1.12.0.7        cray-parallel-netcdf/1.12.1.7
+--- /opt/cray/pe/lmod/modulefiles/mpi/crayclang/14.0/ofi/1.0/cray-mpich/8.0 ----
+   cray-hdf5-parallel/1.12.2.1    cray-parallel-netcdf/1.12.3.1
+   cray-mpixlate/1.0.0.6
 
---------------- /opt/cray/pe/lmod/modulefiles/perftools/21.02.0 ----------------
+--------- /opt/cray/pe/lmod/modulefiles/comnet/crayclang/14.0/ofi/1.0 ----------
+   cray-mpich-abi/8.1.23    cray-mpich/8.1.23 (L)
+
+------------ /opt/cray/pe/lmod/modulefiles/compiler/crayclang/14.0 -------------
+   cray-hdf5/1.12.2.1
+
+----------------- /opt/cray/pe/lmod/modulefiles/mix_compilers ------------------
+   aocc-mixed/3.2.0    cce-mixed/15.0.0    gcc-mixed/11.2.0
+
+--------------- /opt/cray/pe/lmod/modulefiles/perftools/22.12.0 ----------------
    perftools                perftools-lite-gpu      perftools-preload
    perftools-lite           perftools-lite-hbm
    perftools-lite-events    perftools-lite-loops
 
---------- /opt/cray/pe/lmod/modulefiles/comnet/crayclang/10.0/ofi/1.0 ----------
-   cray-mpich-abi/8.1.4 (D)    cray-mpich/8.1.4 (L,D)
-   cray-mpich-abi/8.1.9        cray-mpich/8.1.9
-
 ------------------ /opt/cray/pe/lmod/modulefiles/net/ofi/1.0 -------------------
-   cray-openshmemx/11.2.0 (D)    cray-openshmemx/11.3.3
+   cray-openshmemx/11.5.7
 
 ---------------- /opt/cray/pe/lmod/modulefiles/cpu/x86-rome/1.0 ----------------
-   cray-fftw/3.3.8.9 (D)    cray-fftw/3.3.8.11
-
------------- /opt/cray/pe/lmod/modulefiles/compiler/crayclang/10.0 -------------
-   cray-hdf5/1.12.0.3 (D)    cray-hdf5/1.12.0.7
+   cray-fftw/3.3.10.3
 
 -------------------- /usr/share/lmod/lmod/modulefiles/Core ---------------------
    lmod    settarg
 
 ---------------------- /opt/cray/pe/lmod/modulefiles/core ----------------------
-   PrgEnv-aocc/8.0.0     (D)      cray-libsci/21.08.1.2
-   PrgEnv-aocc/8.1.0              cray-pals/1.0.17
-   PrgEnv-cray/8.0.0     (L,D)    cray-pmi-lib/6.0.10    (D)
-   PrgEnv-cray/8.1.0              cray-pmi-lib/6.0.13
-   PrgEnv-gnu/8.0.0      (D)      cray-pmi/6.0.10        (D)
-   PrgEnv-gnu/8.1.0               cray-pmi/6.0.13
-   aocc/2.2.0                     cray-python/3.8.5.0    (D)
-   aocc/2.2.0.1          (D)      cray-python/3.9.4.1
-   aocc/3.0.0                     cray-stat/4.10.1       (D)
-   atp/3.13.1            (D)      cray-stat/4.11.5
-   atp/3.14.5                     craype/2.7.6           (L,D)
-   cce/11.0.4            (L,D)    craype/2.7.10
-   cce/12.0.3                     craypkg-gen/1.3.14     (D)
-   cpe-cuda/21.09                 craypkg-gen/1.3.18
-   cpe/21.04             (D)      gcc/9.3.0
-   cpe/21.09                      gcc/10.2.0             (D)
-   cray-R/4.0.3.0        (D)      gcc/10.3.0
-   cray-R/4.1.1.0                 gcc/11.2.0
-   cray-ccdb/4.11.1      (D)      gdb4hpc/4.12.5         (D)
-   cray-ccdb/4.12.4               gdb4hpc/4.13.5
-   cray-cti/2.13.6       (D)      iobuf/2.0.10
-   cray-cti/2.15.5                papi/6.0.0.6           (D)
-   cray-dsmml/0.1.4      (D)      papi/6.0.0.9
-   cray-dsmml/0.2.1               perftools-base/21.02.0 (L,D)
-   cray-jemalloc/5.1.0.4          perftools-base/21.09.0
-   cray-libpals/1.0.17            valgrind4hpc/2.11.1    (D)
-   cray-libsci/21.04.1.1 (L,D)    valgrind4hpc/2.12.4
+   PrgEnv-aocc/8.3.3          cray-libsci/22.12.1.1  (L)
+   PrgEnv-cray/8.3.3   (L)    cray-mrnet/5.0.4
+   PrgEnv-gnu/8.3.3           cray-pals/1.2.5
+   aocc/3.2.0                 cray-pmi/6.1.8
+   atp/3.14.16                cray-python/3.9.13.1
+   cce/15.0.0          (L)    cray-stat/4.11.13
+   cpe-cuda/22.12             craype/2.7.19          (L)
+   cpe/22.12                  craypkg-gen/1.3.28
+   cray-R/4.2.1.1             gcc/10.3.0
+   cray-ccdb/4.12.13          gcc/11.2.0             (D)
+   cray-cti/2.15.14           gdb4hpc/4.14.6
+   cray-cti/2.16.0            iobuf/2.0.10
+   cray-cti/2.17.1     (D)    papi/6.0.0.17
+   cray-dsmml/0.2.2    (L)    perftools-base/22.12.0 (L)
+   cray-dyninst/12.1.1        sanitizers4hpc/1.0.4
+   cray-libpals/1.2.5         valgrind4hpc/2.12.10
 
 ------------- /opt/cray/pe/lmod/modulefiles/craype-targets/default -------------
-   craype-accel-amd-gfx908    craype-hugepages256M    craype-network-none
-   craype-accel-amd-gfx90a    craype-hugepages2G      craype-network-ofi  (L)
-   craype-accel-host          craype-hugepages2M      craype-network-ucx
+   craype-accel-amd-gfx908    craype-hugepages256M    craype-network-ofi (L)
+   craype-accel-amd-gfx90a    craype-hugepages2G      craype-network-ucx
+   craype-accel-host          craype-hugepages2M      craype-x86-genoa
    craype-accel-nvidia70      craype-hugepages32M     craype-x86-milan
-   craype-accel-nvidia80      craype-hugepages4M      craype-x86-rome     (L)
-   craype-hugepages128M       craype-hugepages512M    craype-x86-trento
-   craype-hugepages16M        craype-hugepages64M
-   craype-hugepages1G         craype-hugepages8M
+   craype-accel-nvidia80      craype-hugepages4M      craype-x86-milan-x
+   craype-arm-grace           craype-hugepages512M    craype-x86-rome    (L)
+   craype-hugepages128M       craype-hugepages64M     craype-x86-spr
+   craype-hugepages16M        craype-hugepages8M      craype-x86-spr-hbm
+   craype-hugepages1G         craype-network-none     craype-x86-trento
 
 ------------------------- /usr/local/share/modulefiles -------------------------
    load-epcc-module (L)
 
 ---------------------------- /opt/cray/modulefiles -----------------------------
-   cray-lustre-client/2.12.4.2_cray_63_g79cd827-7.0.1.0_8.1__g79cd827237.shasta
-   cray-shasta-mlnx-firmware/1.0.8
-   dvs/2.12_4.0.112-7.0.1.0_15.1__ga97f35d9
-   libfabric/1.11.0.4.71                                                        (L)
-   xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta                                    (L)
+   cray-lustre-client/2.15.0.4_rc2_cray_172_ge66844d-2.4_15.5__ge66844d2b7.shasta
+   dvs/2.15_4.4.143-2.4_28.11__gfbece4c5
+   libfabric/1.12.1.2.2.0.0                                                       (L)
+   xpmem/2.5.2-2.4_3.30__gd0f7936.shasta                                          (L)
 
-------------------------------- /opt/modulefiles -------------------------------
-   aocc/2.2.0      aocc/3.0.0        gcc/8.1.0    gcc/10.2.0
-   aocc/2.2.0.1    cray-R/4.0.3.0    gcc/9.3.0
+  Where:
+   L:  Module is loaded
+   D:  Default Module
+
+Module defaults are chosen based on Find First Rules due to Name/Version/Version modules found in the module tree.
+See https://lmod.readthedocs.io/en/latest/060_locating.html for details.
 
 Use "module spider" to find all possible modules and extensions.
 Use "module keyword key1 key2 ..." to search for all possible modules matching
@@ -218,7 +240,7 @@ auser@ln01:~> module help cray-mpich
 ```
 {: .language-bash}
 ```
------------------ Module Specific Help for "cray-mpich/8.1.9" ------------------
+----------------- Module Specific Help for "cray-mpich/8.1.23" -----------------
 
 
                                   COPYRIGHT
@@ -261,20 +283,20 @@ product, or process disclosed, or represents that its use would not infringe
 privately owned rights.
 
 
-Cray MPICH 8.1.9:
+Cray MPICH 8.1.23:
 =======================================
 
 Release Date:
 -------------
-  August 18, 2021
+  November 29, 2022
 
 
 Purpose:
 --------
-  Cray MPICH 8.1.9 is based upon ANL MPICH 3.4a2 with support for libfabric
+  Cray MPICH 8.1.23 is based upon ANL MPICH 3.4a2 with support for libfabric
   and is optimized for the Cray Programming Environment.
 
-  Major Differences Cray MPICH 8.1.9 from the XC Cray MPICH include:
+  Major Differences Cray MPICH 8.1.23 from the XC Cray MPICH include:
 
       - Uses the new ANL MPICH CH4 code path and libfabric for network
         support.
@@ -283,7 +305,7 @@ Purpose:
 
       - Does not support C++ language bindings
 
-...lots more information... 
+[...lots more information...] 
 ```
 {: .output}
 
@@ -298,13 +320,13 @@ auser@ln01:~> module list
 {: .language-bash}
 ```
 Currently Loaded Modules:
-  1) cce/11.0.4                                  8) cray-mpich/8.1.4
-  2) craype/2.7.6                                9) cray-libsci/21.04.1.1
-  3) craype-x86-rome                            10) PrgEnv-cray/8.0.0
-  4) libfabric/1.11.0.4.71                      11) bolt/0.7
-  5) craype-network-ofi                         12) epcc-setup-env
-  6) perftools-base/21.02.0                     13) load-epcc-module
-  7) xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta
+  1) craype-x86-rome                         8) cray-dsmml/0.2.2
+  2) libfabric/1.12.1.2.2.0.0                9) cray-mpich/8.1.23
+  3) craype-network-ofi                     10) cray-libsci/22.12.1.1
+  4) perftools-base/22.12.0                 11) PrgEnv-cray/8.3.3
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  12) bolt/0.8
+  6) cce/15.0.0                             13) epcc-setup-env
+  7) craype/2.7.19                          14) load-epcc-module
 ```
 {: .output}
 
@@ -323,17 +345,18 @@ auser@ln01:~> module list
 {: .language-bash}
 ```
 Currently Loaded Modules:
-  1) cce/11.0.4                                  8) cray-mpich/8.1.4
-  2) craype/2.7.6                                9) cray-libsci/21.04.1.1
-  3) craype-x86-rome                            10) PrgEnv-cray/8.0.0
-  4) libfabric/1.11.0.4.71                      11) bolt/0.7
-  5) craype-network-ofi                         12) epcc-setup-env
-  6) perftools-base/21.02.0                     13) load-epcc-module
-  7) xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta  14) cray-fftw/3.3.8.9
+  1) craype-x86-rome                         9) cray-mpich/8.1.23
+  2) libfabric/1.12.1.2.2.0.0               10) cray-libsci/22.12.1.1
+  3) craype-network-ofi                     11) PrgEnv-cray/8.3.3
+  4) perftools-base/22.12.0                 12) bolt/0.8
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  13) epcc-setup-env
+  6) cce/15.0.0                             14) load-epcc-module
+  7) craype/2.7.19                          15) cray-fftw/3.3.10.3
+  8) cray-dsmml/0.2.2
 ```
 {: .output}
 
-You can see that we now have the default `cray-fftw` module `cray-fftw/3.3.8.9` as we did not specify a version
+You can see that we now have the default `cray-fftw` module `cray-fftw/3.3.10.3` as we did not specify a version
 explicitly.
 
 <!--
@@ -353,12 +376,29 @@ If you want to swap two versions of the same module then you use the `module swa
 combines the `module unload` and `module load` commands:
 
 ```
-auser@ln01:~> module swap cray-fftw cray-fftw/3.3.8.11
+auser@ln01:~> module load imagemagick/6.8.9
+auser@ln01:~> module list
+```
+{: .language-bash}
+```
+Currently Loaded Modules:
+  1) craype-x86-rome                         9) cray-mpich/8.1.23
+  2) libfabric/1.12.1.2.2.0.0               10) cray-libsci/22.12.1.1
+  3) craype-network-ofi                     11) PrgEnv-cray/8.3.3
+  4) perftools-base/22.12.0                 12) bolt/0.8
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  13) epcc-setup-env
+  6) cce/15.0.0                             14) load-epcc-module
+  7) craype/2.7.19                          15) imagemagick/6.8.9
+  8) cray-dsmml/0.2.2
+```
+{: .output}
+```
+auser@ln01:~> module swap imagemagick/6.8.9 imagemagick/7.1.0
 ```
 {: .language-bash}
 ```
 The following have been reloaded with a version change:
-  1) cray-fftw/3.3.8.9 => cray-fftw/3.3.8.11
+  1) imagemagick/6.8.9 => imagemagick/7.1.0
 ```
 {: .output}
 
@@ -391,10 +431,9 @@ auser@ln01:~> module spider cray-netcdf
   cray-netcdf:
 ----------------------------------------------------------------------------
      Versions:
-        cray-netcdf/4.7.4.3
-        cray-netcdf/4.7.4.7
+        cray-netcdf/4.9.0.1
      Other possible modules matches:
-        cray-netcdf-hdf5parallel  epcc-cray-netcdf-hdf5parallel
+        cray-netcdf-hdf5parallel
 
 ----------------------------------------------------------------------------
   To find other possible module matches execute:
@@ -406,41 +445,34 @@ auser@ln01:~> module spider cray-netcdf
   Note that names that have a trailing (E) are extensions provided by other modules.
   For example:
 
-     $ module spider cray-netcdf/4.7.4.7
+     $ module spider cray-netcdf/4.9.0.1
 ----------------------------------------------------------------------------
 ```
 {: .output}
 
-We can see that two versions are available, `4.7.4.3` and `4.7.4.7`. Let's find out how to
-load `cray-netcdf/4.7.4.3`, providing the full module name as the argument to
+We can see that one version is available, `4.9.0.1`. Let's find out how to
+load `cray-netcdf/4.9.0.1`, providing the full module name as the argument to
 `module spider`:
 
 ```
-auser@ln01:~> module spider cray-netcdf/4.7.4.3
+auser@ln01:~> module spider cray-netcdf/4.9.0.1
 ```
 {: .language-bash}
 ```
 ----------------------------------------------------------------------------
-  cray-netcdf: cray-netcdf/4.7.4.3
+  cray-netcdf: cray-netcdf/4.9.0.1
 ----------------------------------------------------------------------------
 
-    You will need to load all module(s) on any one of the lines below before the "cray-netcdf/4.7.4.3" module is available to load.
+    You will need to load all module(s) on any one of the lines below before the "cray-netcdf/4.9.0.1" module is available to load.
 
-      aocc/2.2.0  cray-hdf5/1.12.0.3
-      aocc/2.2.0.1  cray-hdf5/1.12.0.3
-      cce/11.0.4  cray-hdf5/1.12.0.3
-      cce/11.0.4  cray-hdf5/1.12.0.7
-      gcc/10.2.0  cray-hdf5/1.12.0.3
-      gcc/10.2.0  cray-hdf5/1.12.0.7
-      gcc/10.3.0  cray-hdf5/1.12.0.3
-      gcc/10.3.0  cray-hdf5/1.12.0.7
-      gcc/11.2.0  cray-hdf5/1.12.0.3
-      gcc/11.2.0  cray-hdf5/1.12.0.7
-      gcc/9.3.0  cray-hdf5/1.12.0.3
-      gcc/9.3.0  cray-hdf5/1.12.0.7
+      aocc/3.2.0  cray-hdf5/1.12.2.1
+      cray-hdf5/1.12.2.1
+      gcc/10.3.0  cray-hdf5/1.12.2.1
+      gcc/11.2.0  cray-hdf5/1.12.2.1
+      load-epcc-module  extra-compilers/1.0  gcc/12.2.0  cray-hdf5/1.12.2.1
 
     Help:
-      Release info:  /opt/cray/pe/netcdf/4.7.4.3/release_info
+      Release info:  /opt/cray/pe/netcdf/4.9.0.1/release_info
 ```
 {: .output}
 
@@ -450,20 +482,16 @@ so what we're missing is a version of `cray-hdf5`. If we choose and load one, we
 will then find `cray-netcdf` listed by `module avail` and be able to load it:
 
 ```
-auser@ln01:~> module load cray-hdf5/1.12.0.3
+auser@ln01:~> module load cray-hdf5/1.12.2.1
 auser@ln01:~> module avail cray-netcdf
 ```
 {: .language-bash}
 ```
------- /opt/cray/pe/lmod/modulefiles/hdf5/crayclang/10.0/cray-hdf5/1.12.0 ------
-   cray-netcdf/4.7.4.3 (D)    cray-netcdf/4.7.4.7
+------ /opt/cray/pe/lmod/modulefiles/hdf5/crayclang/14.0/cray-hdf5/1.12.2 ------
+   cray-netcdf/4.9.0.1
 
-------------------- /work/y07/shared/archer2-lmod/libs/core --------------------
-   epcc-cray-netcdf-hdf5parallel/4.7.4.3 (D)
-   epcc-cray-netcdf-hdf5parallel/4.7.4.7
-
-  Where:
-   D:  Default Module
+Module defaults are chosen based on Find First Rules due to Name/Version/Version modules found in the module tree.
+See https://lmod.readthedocs.io/en/latest/060_locating.html for details.
 
 Use "module spider" to find all possible modules and extensions.
 Use "module keyword key1 key2 ..." to search for all possible modules matching
@@ -471,20 +499,20 @@ any of the "keys".
 ```
 {: .output}
 ```
-auser@ln01:~> module load cray-netcdf/4.7.4.3
+auser@ln01:~> module load cray-netcdf/4.9.0.1
 auser@ln01:~> module list
 ```
 {: .language-bash}
 ```
 Currently Loaded Modules:
-  1) cce/11.0.4                                  9) cray-libsci/21.04.1.1
-  2) craype/2.7.6                               10) PrgEnv-cray/8.0.0
-  3) craype-x86-rome                            11) bolt/0.7
-  4) libfabric/1.11.0.4.71                      12) epcc-setup-env
-  5) craype-network-ofi                         13) load-epcc-module
-  6) perftools-base/21.02.0                     14) cray-hdf5/1.12.0.3
-  7) xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta  15) cray-netcdf/4.7.4.3
-  8) cray-mpich/8.1.4
+  1) craype-x86-rome                         9) cray-mpich/8.1.23
+  2) libfabric/1.12.1.2.2.0.0               10) cray-libsci/22.12.1.1
+  3) craype-network-ofi                     11) PrgEnv-cray/8.3.3
+  4) perftools-base/22.12.0                 12) bolt/0.8
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  13) epcc-setup-env
+  6) cce/15.0.0                             14) load-epcc-module
+  7) craype/2.7.19                          15) cray-hdf5/1.12.2.1
+  8) cray-dsmml/0.2.2                       16) cray-netcdf/4.9.0.1
 ```
 {: .output}
 
@@ -512,12 +540,12 @@ auser@ln01:~> module load PrgEnv-gnu
 ```
 {: .language-bash}
 ```
-Lmod is automatically replacing "cce/11.0.4" with "gcc/10.2.0".
+Lmod is automatically replacing "cce/15.0.0" with "gcc/11.2.0".
 
-Lmod is automatically replacing "PrgEnv-cray/8.0.0" with "PrgEnv-gnu/8.0.0".
+Lmod is automatically replacing "PrgEnv-cray/8.3.3" with "PrgEnv-gnu/8.3.3".
 
 Due to MODULEPATH changes, the following have been reloaded:
-  1) cray-mpich/8.1.4
+  1) cray-mpich/8.1.23
 ```
 {: .output}
 ```
@@ -526,13 +554,13 @@ auser@ln01:~> module list
 {: .language-bash}
 ```
 Currently Loaded Modules:
-  1) gcc/10.2.0                                  8) cray-mpich/8.1.4
-  2) craype/2.7.6                                9) cray-libsci/21.04.1.1
-  3) craype-x86-rome                            10) bolt/0.7
-  4) libfabric/1.11.0.4.71                      11) epcc-setup-env
-  5) craype-network-ofi                         12) load-epcc-module
-  6) perftools-base/21.02.0                     13) PrgEnv-gnu/8.0.0
-  7) xpmem/2.2.40-7.0.1.0_2.7__g1d7a24d.shasta
+  1) craype-x86-rome                         8) load-epcc-module
+  2) libfabric/1.12.1.2.2.0.0                9) gcc/11.2.0
+  3) craype-network-ofi                     10) craype/2.7.19
+  4) perftools-base/22.12.0                 11) cray-dsmml/0.2.2
+  5) xpmem/2.5.2-2.4_3.30__gd0f7936.shasta  12) cray-mpich/8.1.23
+  6) bolt/0.8                               13) cray-libsci/22.12.1.1
+  7) epcc-setup-env                         14) PrgEnv-gnu/8.3.3
 ```
 {: .output}
 
@@ -551,7 +579,7 @@ environment and then switch to a different version of GCC:
 
 ```
 auser@ln01:~> module load PrgEnv-gnu
-auser@ln01:~> module swap gcc gcc/11.2.0
+auser@ln01:~> module swap gcc gcc/10.3.0
 ```
 {: .language-bash}
 
@@ -560,23 +588,19 @@ releases, each containing the full set of Cray software that is guaranteed to wo
 as a whole. As a different version of the compiler is not guaranteed to work, it is generally
 preferable to instead change the full CPE version.
 
-The default software on logging in to ARCHER2 is provided by CPE 21.04. A newer version,
-CPE 21.09, is also available, and can be loaded by running:
+The default software on logging in to ARCHER2 is provided by CPE 22.12. We have previously also
+used CPE 21.04 and 21.09. At the moment we only have one CPE version installed, but you can
+expect that newer versions will become available in the future. You can change between entire
+CPE releases by loading the relevant module -- so, if CPE 23.11 were available, you would do
 
 ```
-auser@ln01:~> module load cpe/21.09
+auser@ln01:~> module load cpe/23.11
 ```
 {: .language-bash}
 
 This will swap the compiler to the one from the new CPE version and also change the default
 version of the HPE Cray modules to those which are part of the CPE. At this point you can load
-the programming environment you need followed by any libraries. Finally, you should modify
-`LD_LIBRARY_PATH` to include the new non-default libraries:
-
-```
-auser@ln01:~> export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-```
-{: .language-bash}
+the programming environment you need followed by any libraries.
 
 ## Compiler wrappers
 
